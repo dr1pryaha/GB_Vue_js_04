@@ -50,8 +50,14 @@
 <script>
 export default {
   name: "List",
-  props: {
-    list: Array,
+  // props: {
+  //   list: Array,
+  // },
+
+  computed: {
+    list() {
+      return this.$store.getters.getCostsList;
+    },
   },
 };
 </script>

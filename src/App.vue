@@ -3,7 +3,7 @@
     <img alt="Vue logo" src="./assets/logo.png" />
     <h1>My Personal Costs</h1>
     <AddButton @showPopup="popupToggle"></AddButton>
-    <List :list="paginatedData"></List>
+    <List></List>
     <Form
       :costsList="costsList"
       @closePopup="popupToggle"
@@ -42,21 +42,25 @@ export default {
     };
   },
 
+  mounted() {
+    this.$store.dispatch("loadCosts");
+  },
+
   methods: {
-    fetchData() {
-      return [
-        { id: 1, date: "20.09.2022", category: "food", value: 1582 },
-        { id: 2, date: "15.09.2022", category: "transport", value: 245 },
-        { id: 3, date: "22.09.2022", category: "healthcare", value: 780 },
-        { id: 4, date: "22.09.2022", category: "healthcare", value: 780 },
-        { id: 5, date: "22.09.2022", category: "healthcare", value: 780 },
-        { id: 6, date: "22.09.2022", category: "healthcare", value: 780 },
-        { id: 7, date: "22.09.2022", category: "healthcare", value: 780 },
-        { id: 8, date: "22.09.2022", category: "healthcare", value: 780 },
-        { id: 9, date: "22.09.2022", category: "healthcare", value: 780 },
-        { id: 10, date: "22.09.2022", category: "healthcare", value: 780 },
-      ];
-    },
+    // fetchData() {
+    //   return [
+    //     { id: 1, date: "20.09.2022", category: "food", value: 1582 },
+    //     { id: 2, date: "15.09.2022", category: "transport", value: 245 },
+    //     { id: 3, date: "22.09.2022", category: "healthcare", value: 780 },
+    //     { id: 4, date: "22.09.2022", category: "healthcare", value: 780 },
+    //     { id: 5, date: "22.09.2022", category: "healthcare", value: 780 },
+    //     { id: 6, date: "22.09.2022", category: "healthcare", value: 780 },
+    //     { id: 7, date: "22.09.2022", category: "healthcare", value: 780 },
+    //     { id: 8, date: "22.09.2022", category: "healthcare", value: 780 },
+    //     { id: 9, date: "22.09.2022", category: "healthcare", value: 780 },
+    //     { id: 10, date: "22.09.2022", category: "healthcare", value: 780 },
+    //   ];
+    // },
     popupToggle() {
       this.isPopupActive = !this.isPopupActive;
     },
@@ -79,9 +83,9 @@ export default {
     },
   },
 
-  created() {
-    this.costsList = this.fetchData();
-  },
+  // created() {
+  //   this.costsList = this.fetchData();
+  // },
 };
 </script>
 
