@@ -67,22 +67,6 @@ export default {
       required: false,
       default: 5,
     },
-    pageCount: {
-      type: Number,
-      required: true,
-    },
-    perPage: {
-      type: Number,
-      required: true,
-    },
-    currentPage: {
-      type: Number,
-      required: true,
-    },
-    costsList: {
-      type: Array,
-      required: true,
-    },
     size: {
       type: Number,
       required: false,
@@ -92,16 +76,19 @@ export default {
 
   computed: {
     startPage() {
-      if (this.currentPage === 1 || this.currentPage === this.pageCount) {
+      if (
+        this.$store.getters.getCurrentPage === 1 ||
+        this.$store.getters.getCurrentPage === this.$store.getters.getPageCount
+      ) {
         return 1;
       }
 
-      return this.currentPage - 1;
+      return this.$store.getters.getCurrentPage - 1;
     },
     endPage() {
       return Math.min(
         this.startPage + this.maxVisibleButtons - 1,
-        this.pageCount
+        this.$store.getters.getPageCount
       );
     },
     pages() {
@@ -110,37 +97,45 @@ export default {
       for (let i = this.startPage; i <= this.endPage; i += 1) {
         range.push({
           name: i,
-          isDisabled: i === this.currentPage,
+          isDisabled: i === this.$store.getters.getCurrentPage,
         });
       }
 
       return range;
     },
     isInFirstPage() {
-      return this.currentPage === 1;
+      return this.$store.getters.getCurrentPage === 1;
     },
     isInLastPage() {
-      return this.currentPage === this.pageCount;
+      return (
+        this.$store.getters.getCurrentPage === this.$store.getters.getPageCount
+      );
     },
   },
   methods: {
     onClickFirstPage() {
-      this.$emit("onPageChange", 1);
+      this.$store.commit("setCurrentPage", 1);
     },
     onClickPreviousPage() {
-      this.$emit("onPageChange", this.currentPage - 1);
+      this.$store.commit(
+        "setCurrentPage",
+        this.$store.getters.getCurrentPage - 1
+      );
     },
     onClickPage(page) {
-      this.$emit("onPageChange", page);
+      this.$store.commit("setCurrentPage", page);
     },
     onClickNextPage() {
-      this.$emit("onPageChange", this.currentPage + 1);
+      this.$store.commit(
+        "setCurrentPage",
+        this.$store.getters.getCurrentPage + 1
+      );
     },
     onClickLastPage() {
-      this.$emit("onPageChange", this.pageCount);
+      this.$store.commit("setCurrentPage", this.$store.getters.getPageCount);
     },
     isPageActive(page) {
-      return this.currentPage === page;
+      return this.$store.getters.getCurrentPage === page;
     },
   },
 };

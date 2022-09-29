@@ -7,20 +7,48 @@ export default new Vuex.Store({
   // хранилище данных
   state: {
     costsData: [],
+    currentPage: 1,
+    perPage: 5,
+    category: "",
+    value: "",
+    date: "",
+    error: false,
+    isPopupActive: false,
   },
+
   // для вычисления производного состояния на основе состояния хранилища
+  // для получения данных из хранилища
   getters: {
     getCostsList: state => {
       return state.costsData;
     },
+    getPageCount: state => {
+      let l = state.costsData.length,
+        s = state.perPage;
+      return Math.ceil(l / s);
+    },
+    getPaginatedData: state => {
+      const start = (state.currentPage - 1) * state.perPage,
+        end = start + state.perPage;
+      return state.costsData.slice(start, end);
+    },
+    getIsPopupActive: state => state.isPopupActive,
+    getCurrentPage: state => state.currentPage,
+    getMaxId: state =>
+      state.costsData.map(({ id }) => id).sort((a, b) => a - b)[
+        state.costsData.length - 1
+      ],
   },
-  //для изменения данных в state
 
+  //для изменения данных в state
   mutations: {
     setCostsList: (state, payload) => (state.costsData = payload),
     addCostsList: (state, payload) => state.costsData.push(payload),
+    setCurrentPage: (state, payload) => (state.currentPage = payload),
+    setIsPopupActive: (state, payload) => (state.isPopupActive = payload),
   },
-  // для обмена данными между клиентом-сервером
+
+  // для обмена данными между клиентом-сервером (асинхронных операций)
   actions: {
     async loadCosts({ commit }) {
       const list = await new Promise((resolve, reject) => {

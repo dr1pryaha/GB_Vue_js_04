@@ -50,13 +50,14 @@
 <script>
 export default {
   name: "List",
-  // props: {
-  //   list: Array,
-  // },
+
+  mounted() {
+    this.$store.dispatch("loadCosts");
+  },
 
   computed: {
     list() {
-      return this.$store.getters.getCostsList;
+      return this.$store.getters.getPaginatedData;
     },
   },
 };

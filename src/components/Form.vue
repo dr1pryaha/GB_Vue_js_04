@@ -1,5 +1,5 @@
 <template>
-  <div class="form">
+  <div class="form" v-if="isPopupActive">
     <div @click="closeBtnClick" class="closeModal"></div>
     <input
       v-model="category"
@@ -32,9 +32,6 @@
 <script>
 export default {
   name: "Form",
-  props: {
-    costsList: Array,
-  },
 
   data() {
     return {
@@ -47,22 +44,13 @@ export default {
 
   methods: {
     closeBtnClick() {
-      this.$emit("closePopup");
-    },
-
-    getId() {
-      return (
-        this.costsList.map(({ id }) => id).sort((a, b) => a - b)[
-          this.costsList.length - 1
-        ] + 1
-      );
+      this.$store.commit("setIsPopupActive", !this.$store.state.isPopupActive);
     },
 
     submitData() {
       if (this.category && this.date && this.value) {
-        this.$emit("costsList");
-        this.costsList.push({
-          id: this.getId(),
+        this.$store.commit("addCostsList", {
+          id: this.$store.getters.getMaxId + 1,
           date: this.date,
           category: this.category,
           value: this.value,
@@ -71,6 +59,12 @@ export default {
         this.value = "";
         this.date = "";
       }
+    },
+  },
+
+  computed: {
+    isPopupActive() {
+      return this.$store.getters.getIsPopupActive;
     },
   },
 };
