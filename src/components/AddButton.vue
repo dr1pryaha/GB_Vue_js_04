@@ -5,12 +5,9 @@
 <script>
 export default {
   name: "AddButton",
-  // props: {
-  //   msg: String,
-  // },
   methods: {
     onBtnClick() {
-      this.$emit("showPopup");
+      this.$store.commit("setIsPopupActive", !this.$store.state.isPopupActive);
     },
   },
 };
